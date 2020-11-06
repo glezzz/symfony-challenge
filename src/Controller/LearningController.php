@@ -1,8 +1,7 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
-
-
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,23 +19,32 @@ class LearningController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/aboutMe", name="aboutMe")
+     */
     public function aboutMe(): Response
     {
-        return $this->render('aboutMe.html.twig', [
+        return $this->render('learning/aboutMe.html.twig', [
             'name' => 'Alejandro'
         ]);
     }
 
+    /**
+     * @Route("/showMyName", name="showMyName")
+     */
     public function showMyName(): Response
     {
-        return $this->render('showMyName.html.twig', [
+        return $this->render('learning/showMyName.html.twig', [
             'name' => 'Unknown'
         ]);
     }
 
+    /**
+     * @Route("/changeMyName", name="changeMyName", methods={"POST"})
+     */
     public function changeMyName(): Response
     {
-        return $this->render('changeMyName.html.twig', [
+        return $this->render('learning/changeMyName.html.twig', [
             'name' => $_POST['new-name']
         ]);
     }
