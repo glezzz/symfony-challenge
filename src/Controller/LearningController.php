@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controller;
 
@@ -18,8 +19,8 @@ class LearningController extends AbstractController
         ]);
     }
 
-    public function aboutMe()
+    public function aboutMe(): Response
     {
-        
+        return $this->render('example.twig', ['name' => 'BeCode']);
     }
 }
