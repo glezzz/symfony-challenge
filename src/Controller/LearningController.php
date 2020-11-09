@@ -5,10 +5,23 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class LearningController extends AbstractController
 {
+    private string $name;
+    private $session;
+
+    /**
+     * LearningController constructor.
+     * @param $session
+     */
+    public function __construct(SessionInterface $session)
+    {
+        $this->session = $session;
+    }
+
     /**
      * @Route("/learning", name="learning")
      */
@@ -24,9 +37,15 @@ class LearningController extends AbstractController
      */
     public function aboutMe(): Response
     {
-        return $this->render('learning/aboutMe.html.twig', [
-            'name' => 'Alejandro'
-        ]);
+        $this->name = $this->session->get('name', 'Unknown');
+        if($this->name == 'Unknown'){
+            return $this->redirectToRoute('home');
+        }else {
+            return $this->render('learn/aboutMe.html.twig', [
+                'about_me' => 'this is about me',
+                'name' => $this->name
+            ]);
+        }
     }
 
     /**
@@ -34,18 +53,17 @@ class LearningController extends AbstractController
      */
     public function showMyName(): Response
     {
-        return $this->render('learning/showMyName.html.twig', [
-            'name' => 'Unknown'
-        ]);
+        $this->name = $this->session->get('name', 'Unknown');
+        return $this->render('learn/showMyName.html.twig',
+            ['name' => $this->name]);
     }
 
     /**
      * @Route("/changeMyName", name="changeMyName", methods={"POST"})
      */
-    public function changeMyName(): Response
+    public function changeMyName(SessionInterface $session)
     {
-        return $this->render('learning/changeMyName.html.twig', [
-            'name' => $_POST['new-name']
-        ]);
+        $this->session->set('name', $_POST['name']);
+        return $this->redirectToRoute('home');
     }
 }
